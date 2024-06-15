@@ -26,6 +26,7 @@
         "@oclif/core": "^3.26.5",
         "@oclif/plugin-help": "^6.0.21",
         "@oclif/plugin-plugins": "^5.0.17",
+        "bin": "link:/home/pedro/fun/cartesi/cli/apps/cli/bin",
         "bytes": "^3.1",
         "chalk": "^5.3.0",
         "execa": "^8.0",
