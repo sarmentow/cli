@@ -24,6 +24,10 @@ export default class SendGeneric extends SendBaseCommand<typeof SendGeneric> {
     static examples = ["<%= config.bin %> <%= command.id %>"];
 
     static flags = {
+        "input-file": Flags.string({
+            description: "input payload as file",
+            summary: "see input-encoding for definition on how input is parsed",
+        }),
         input: Flags.string({
             description: "input payload",
             summary: "see input-encoding for definition on how input is parsed",
@@ -42,6 +46,16 @@ export default class SendGeneric extends SendBaseCommand<typeof SendGeneric> {
     };
 
     protected async getInput(): Promise<`0x${string}` | undefined> {
+        const inputFile = this.flags["input-file"];
+        if (inputFile !== "" || inputFile !== undefined) {
+            let content = "";
+            process.stdin.on("data", data => {
+                content += data.toString();
+            })
+
+
+            return stringToHex(content);
+        }
         const input = this.flags.input;
         const encoding = this.flags["input-encoding"];
         if (input) {

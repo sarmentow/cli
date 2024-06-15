@@ -11,10 +11,10 @@ FROM ${BASE_IMAGE} as builder
 
 WORKDIR /usr/local/src
 ARG DEBIAN_FRONTEND=noninteractive
-RUN <<EOF
-set -e
-apt-get update
-apt-get install -y --no-install-recommends \
+RUN
+RUN set -e
+RUN apt-get update
+RUN apt-get install -y --no-install-recommends \
     autoconf \
     automake \
     build-essential \
@@ -22,8 +22,7 @@ apt-get install -y --no-install-recommends \
     curl \
     libarchive-dev \
     libtool
-rm -rf /var/lib/apt/lists/*
-EOF
+RUN rm -rf /var/lib/apt/lists/*
 
 FROM builder as su-exec
 
@@ -63,34 +62,24 @@ ARG XGENEXT2_VERSION
 
 USER root
 ARG DEBIAN_FRONTEND=noninteractive
-RUN <<EOF
-set -e
-apt-get update
-apt-get install -y --no-install-recommends \
-    ca-certificates \
-    curl \
-    jq \
-    libarchive-tools \
-    locales \
-    squashfs-tools \
-    xxd \
-    xz-utils
-rm -rf /var/lib/apt/lists/*
+RUN set -e
+RUN apt-get update
+RUN apt-get install -y --no-install-recommends ca-certificates curl jq libarchive-tools locales squashfs-tools xxd xz-utils
+RUN rm -rf /var/lib/apt/lists/*
 
-sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
-locale-gen
-update-locale LANG=en_US.UTF-8
-EOF
+RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen
+RUN locale-gen
+RUN update-locale LANG=en_US.UTF-8
+
 
 # Install dpkg release of xgenext2fs
-RUN <<EOF
-ARCH=$(dpkg --print-architecture)
-curl -sSL https://github.com/cartesi/genext2fs/releases/download/v${XGENEXT2_VERSION}/xgenext2fs_${ARCH}.deb \
+RUN ARCH=$(dpkg --print-architecture)
+RUN curl -sSL https://github.com/cartesi/genext2fs/releases/download/v${XGENEXT2_VERSION}/xgenext2fs_${ARCH}.deb \
     -o ./xgenext2fs.deb
-dpkg -i ./xgenext2fs.deb
-rm ./xgenext2fs.deb
-xgenext2fs --version
-EOF
+RUN dpkg -i ./xgenext2fs.deb
+RUN rm ./xgenext2fs.deb
+RUN xgenext2fs --version
+
 
 ENV LC_ALL en_US.UTF-8
 ENV LANG en_US.UTF-8
