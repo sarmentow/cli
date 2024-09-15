@@ -33,6 +33,7 @@ export default class CreateCommand extends BaseCommand<typeof CreateCommand> {
                 "ruby",
                 "rust",
                 "typescript",
+                "onnx-python",
             ],
         }),
         branch: Flags.string({
@@ -50,8 +51,8 @@ export default class CreateCommand extends BaseCommand<typeof CreateCommand> {
             return {
                 name: "cartesi",
                 subdir: input,
-                url: "https://github.com/cartesi/application-templates",
-                tar: `https://codeload.github.com/cartesi/application-templates/tar.gz/refs/heads/${branch}`,
+                url: "https://github.com/sarmentow/application-templates",
+                tar: `https://codeload.github.com/sarmentow/application-templates/tar.gz/refs/heads/${branch}`,
             };
         };
 
